@@ -1,17 +1,31 @@
-function ran.scrubMSH(MSH)
-   MSH[3][1] = ran.choose(ran.Application)
-   MSH[4][1] = ran.choose(ran.Facility)
-   MSH[5][1] = 'Main HIS'
-   MSH[6][1] = 'St. Micheals'
-   MSH[7][1] = ran.TimeStamp()
-   MSH[9][1] = 'ADT'
-   MSH[9][2] = ran.choose(ran.Event)
-   MSH[10] = util.guid(256)
-   MSH[11][1] = 'P'
-   MSH[12][1] = '2.6'
-   MSH:S()
-end
- 
+from datetime import date
+
+#create a MSH 
+def createMSH():
+   MSH=[]
+   MSH_string=""
+
+   MSH.insert(0,"MSH")
+   MSH.insert(1,"")
+   MSH.insert(2,"^~\&")
+   MSH.insert(3,"ADT-GEN")
+   MSH.insert(4,"Fake Hospital")
+   #MSH[5]  = 'Made UP'
+   #MSH[6]  = 'hl7-rdb'
+   #MSH[7]  = date.today()
+   #MSH[9]  = 'ADT^A08'
+   #MSH[10] = uuid.uuid4S()
+   #MSH[11][1] = 'P'
+   #MSH[12] = '2.3'
+
+   for x in range(0,len(MSH)):
+      MSH_string.join(MSH[x])
+
+   return(print(MSH_string))
+
+createMSH()
+
+"""
 function ran.scrubEVN(EVN)
    EVN[2][1] = ran.TimeStamp()
    EVN[6][1] = ran.TimeStamp()
@@ -173,3 +187,4 @@ function rand(In, Max, Size)
    
    return Result
 end
+"""
