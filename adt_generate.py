@@ -1,4 +1,5 @@
 from datetime import date
+import uuid
 
 #create a MSH 
 def createMSH():
@@ -10,18 +11,16 @@ def createMSH():
    MSH.insert(2,"^~\&")
    MSH.insert(3,"ADT-GEN")
    MSH.insert(4,"Fake Hospital")
-   #MSH[5]  = 'Made UP'
-   #MSH[6]  = 'hl7-rdb'
-   #MSH[7]  = date.today()
-   #MSH[9]  = 'ADT^A08'
-   #MSH[10] = uuid.uuid4S()
-   #MSH[11][1] = 'P'
+   MSH.insert(5,"HL7 TRANSFORM")
+   MSH.insert(6,'hl7-rdb')
+   MSH.insert(7,date.today())
+   MSH.insert(8,"")
+   MSH.insert(9,'ADT^A01')
+   MSH.insert(10,str(uuid.uuid4())[:8])
+   MSH.insert[1] = 'P'
    #MSH[12] = '2.3'
 
-   for x in range(0,len(MSH)):
-      MSH_string.join(MSH[x])
-
-   return(print(MSH_string))
+   return(print(MSH))
 
 createMSH()
 
