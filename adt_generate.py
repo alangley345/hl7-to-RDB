@@ -19,14 +19,14 @@ clerk_id = {'0341','4321','4564','3478','0199','0002','4532','2341'}
 ################################################################################
 
 #creates MSH segment
-def createMSH(event,time):
+def createMSH(event,time,application):
    MSH=[]
    MSH_string=""
 
    MSH.insert(0,"")
    MSH.insert(1,"^~\&")
    MSH.insert(2,"adt-gen")
-   MSH.insert(3,"%s"%(random.choice(tuple(application))))
+   MSH.insert(3,"%s"%(application))
    MSH.insert(4,"My Transform Pipeline")
    MSH.insert(5,'hl7-rdb')
    MSH.insert(6,time)
@@ -42,7 +42,6 @@ def createMSH(event,time):
    return(print("MSH" + MSH_string))
 
 #create EVN segment
-#EVN|A08|202206230204|202010151442|EDREGCLI|IATRICS^Iatric^Systems|REG CLI|.
 def createEVN(event,time,reason, id, event_time, event_facility):
    EVN=[]
    EVN_string=""
@@ -59,6 +58,30 @@ def createEVN(event,time,reason, id, event_time, event_facility):
       EVN_string += (EVN[x] + "|")
 
    return(print("EVN|" + EVN_string))
+
+#PID|1||999612||DEWING^AVERY^J|LISA|19901116|M||W|716 LAKE STREET^^OGDENSBURG^NY^13669||(315)250-4787^^^^^315^2504787|999-9999^^^^^^9999999|E|S|NONE|31458904|023-74-0199|||NH|||||||
+#creates PID segment
+def createPID(application):
+   PID=[]
+   PID_string=""
+
+   PID.insert(0,"1")
+   PID.insert(1,"")
+   PID.insert(2,random.randint(pow(10, 7-1), pow(7, 7) - 1))
+   #PID.insert(3,"%s^%s^%s"%(last,first,))
+   #PID.insert(4,"My Transform Pipeline")
+   #PID.insert(5,'hl7-rdb')
+   #PID.insert(6,time)
+   #PID.insert(7,"")
+   #PID.insert(8,"ADT^%s"%(event))
+   #PID.insert(9,str(uuid.uuid4())[:8])
+   #PID.insert(10,str(uuid.uuid1())[:4])
+   #PID.insert(11,'2.5')
+   
+   for x in range(0,len(PID)):
+      PID_string += (PID[x] + "|")
+
+   return(print("PID" + PID_string))
 
 """
 function ran.scrubPID(PID)
@@ -217,7 +240,9 @@ event_facility = random.choice(tuple(facility))
 event_time = str(
    (datetime.now()-timedelta(minutes = random.randrange(1,999,1))).strftime("%Y%m%d%H%M%S")
 )
+message_application=random.choice(tuple(application))
 
 
-createMSH(message_event, message_time)
+createMSH(message_event, message_time, message_application)
 createEVN(message_event, message_time, message_reason, event_time, message_clerk, event_facility)
+createPID(message_application)
