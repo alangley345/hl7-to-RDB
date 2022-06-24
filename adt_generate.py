@@ -1,13 +1,14 @@
 from datetime import date, datetime, timedelta
 import uuid
 import random
+import string
 
 #dictionaries to pull data from for messages
    #might be moved later on to a db or separate files 
 sex = {'M', 'F'} 
-last_names = {'Muir','Smith','Adams','Garland', 'Meade', 'Fitzgerald', 'WHITE'}
-male_names = {'Fred','Jim','Gary','John','Steve','Wilbur','Aurthur','Mike'}
-female_names = {'Mary','Sabrina','Tracy','Sheena','Miranda','Eileen'}
+last_names = {'Muir','Smith','Adams','Garland','Meade','Fitzgerald','White','Weir','Johnson','Dalton','Reed','Black','Greene','Nedemyer'}
+male_names = {'Fred','Jim','Gary','John','Steve','Wilbur','Aurthur','Mike','Shawn'}
+female_names = {'Mary','Sabrina','Tracy','Sheena','Miranda','Eileen','Tracy','Katie'}
 race = {'AI', 'EU', 'Mixed', 'Martian', 'Unknown', 'White'}
 street = {'Ford St.','Sunshine Lane','Seasame St.','Main St.','Delphi Cres.', 'Miller Lane', 'Yonge St.', 'Main Rd.', 'First Ave'}
 relation = {'Grandchild', 'Second Cousin', 'Sibling', 'Parent'}
@@ -22,21 +23,20 @@ clerk_id = {'0341','4321','4564','3478','0199','0002','4532','2341'}
 def createMSH(event,time,application):
    MSH=[]
    MSH_string=""
-
-   MSH.insert(0,"")
-   MSH.insert(1,"^~\&")
-   MSH.insert(2,"adt-gen")
-   MSH.insert(3,"%s"%(application))
-   MSH.insert(4,"My Transform Pipeline")
-   MSH.insert(5,'hl7-rdb')
-   MSH.insert(6,time)
-   MSH.insert(7,"")
-   MSH.insert(8,"ADT^%s"%(event))
-   MSH.insert(9,str(uuid.uuid4())[:8])
-   MSH.insert(10,str(uuid.uuid1())[:4])
-   MSH.insert(11,'2.5')
+   MSH.insert(1,"")
+   MSH.insert(2,"^~\&")
+   MSH.insert(3,"adt-gen")
+   MSH.insert(4,"%s"%(application))
+   MSH.insert(5,"HL7 ETL Project")
+   MSH.insert(6,'hl7-rdb')
+   MSH.insert(7,time)
+   MSH.insert(8,"")
+   MSH.insert(9,"ADT^%s"%(event))
+   MSH.insert(10,str(uuid.uuid4())[:8])
+   MSH.insert(11,str(uuid.uuid1())[:4])
+   MSH.insert(12,'2.5')
    
-   for x in range(0,len(MSH)):
+   for x in range(1,len(MSH)):
       MSH_string += (MSH[x] + "|")
 
    return(print("MSH" + MSH_string))
@@ -45,32 +45,31 @@ def createMSH(event,time,application):
 def createEVN(event,time,reason, id, event_time, event_facility):
    EVN=[]
    EVN_string=""
-
-   EVN.insert(0,event)
-   EVN.insert(1,time)
+   EVN.insert(1,event)
    EVN.insert(2,time)
-   EVN.insert(3,"%s"%(reason))
-   EVN.insert(4,id)
-   EVN.insert(5,event_time)
-   EVN.insert(6,event_facility)
+   EVN.insert(3,time)
+   EVN.insert(4,"%s"%(reason))
+   EVN.insert(5,id)
+   EVN.insert(6,event_time)
+   EVN.insert(7,event_facility)
    
-   for x in range(0,len(EVN)):
+   for x in range(1,len(EVN)):
       EVN_string += (EVN[x] + "|")
 
    return(print("EVN|" + EVN_string))
 
 #PID|1||999612||DEWING^AVERY^J|LISA|19901116|M||W|716 LAKE STREET^^OGDENSBURG^NY^13669||(315)250-4787^^^^^315^2504787|999-9999^^^^^^9999999|E|S|NONE|31458904|023-74-0199|||NH|||||||
 #creates PID segment
-def createPID(application):
+def createPID(last,first,middle,dob):
    PID=[]
    PID_string=""
-
-   PID.insert(0,"1")
-   PID.insert(1,"")
-   PID.insert(2,random.randint(pow(10, 7-1), pow(7, 7) - 1))
-   #PID.insert(3,"%s^%s^%s"%(last,first,))
-   #PID.insert(4,"My Transform Pipeline")
-   #PID.insert(5,'hl7-rdb')
+   PID.insert(1,"1")
+   PID.insert(2,"")
+   PID.insert(3,str(random.randint(pow(10, 7-1), pow(10, 7) - 1)))
+   PID.insert(4,"")
+   PID.insert(5,"%s^%s^%s"%(last,first,middle))
+   PID.insert(6,"")
+   PID.insert(7,dob)
    #PID.insert(6,time)
    #PID.insert(7,"")
    #PID.insert(8,"ADT^%s"%(event))
@@ -78,7 +77,7 @@ def createPID(application):
    #PID.insert(10,str(uuid.uuid1())[:4])
    #PID.insert(11,'2.5')
    
-   for x in range(0,len(PID)):
+   for x in range(1,len(PID)):
       PID_string += (PID[x] + "|")
 
    return(print("PID" + PID_string))
@@ -242,7 +241,14 @@ event_time = str(
 )
 message_application=random.choice(tuple(application))
 
+patient_last=random.choice(tuple(last_names))
+patient_first=random.choice(tuple(male_names))
+patient_middle=random.choice(string.ascii_uppercase)
+patient_sex=random.choice(tuple(sex))
+patient_dob=str((date.today()-timedelta(days = random.randrange(300,29950,1)
+   )).strftime("%Y%m%d"))
+
 
 createMSH(message_event, message_time, message_application)
 createEVN(message_event, message_time, message_reason, event_time, message_clerk, event_facility)
-createPID(message_application)
+createPID(patient_last, patient_first, patient_middle, patient_dob)
