@@ -93,20 +93,10 @@ def createPID(sex,last,first,middle,dob,race,address,phone,marital):
    return(print("PID" + PID_string))
 
 """
-function ran.scrubPID(PID)
-   PID[3][1][1] = math.random(9999999)
-   ran.NameAndSex(PID)
-   PID[5][1][1][1] = ran.lastName()
-   PID[7][1] = ran.Date()
-   PID[10][1][1] = ran.choose(ran.Race)
-   PID[18][1] = ran.AcctNo()
-   PID[11][1][3], PID[11][1][4] = ran.location()
-   PID[11][1][5] = math.random(99999)
-   PID[11][1][1][1] = math.random(999)..
-      ' '..ran.choose(ran.Street)
-   PID[19] = ran.SSN()
-   PID:S()
-end
+PV1|1|E|ER^^^.|EM|||1396088571^KENNEDY^DEREK^^^^MD|||||||EME||Y|||35001346|MCR|||||||||||||||||||.|||||202206232008||||||||1649274275^KERRIGAN^BRIAN^^^^DO
+
+"""
+"""
  
 function ran.PV1(PV1)
    PV1[8][1][2][1] = ran.lastName()
