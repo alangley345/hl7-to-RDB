@@ -112,7 +112,7 @@ def createNK1(last,first,middle,relation,address,phone):
 
    return(print("NK1|" + NK1_string))
 """
-PV1|1|E|ER^^^.|EM|||1396088571^KENNEDY^DEREK^^^^MD|||||||EME||Y|||35001346|MCR|||||||||||||||||||.|||||202206232008||||||||1649274275^KERRIGAN^BRIAN^^^^DO
+PV1|1|E|ER^^^.|EM|||1396088571^SMITH^JOHN^^^^MD|||||||EME||Y|||35001346|MCR|||||||||||||||||||.|||||202206232008||||||||1649274275^SMITH^JOHN^^^^DO
 """
 
 #segemnt function inputs
