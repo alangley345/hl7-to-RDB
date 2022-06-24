@@ -1,3 +1,4 @@
+#Any result mirroring a real person is strictly random chance
 from datetime import date, datetime, timedelta
 import uuid
 import random
@@ -5,12 +6,15 @@ import string
 
 #dictionaries to pull data from for messages
    #might be moved later on to a db or separate files 
-sex = {'M', 'F'} 
+sex = {'M','F'}
+marital = {'M','S',}
 last_names = {'Muir','Smith','Adams','Garland','Meade','Fitzgerald','White','Weir','Johnson','Dalton','Reed','Black','Greene','Nedemyer'}
-male_names = {'Fred','Jim','Gary','John','Steve','Wilbur','Aurthur','Mike','Shawn'}
-female_names = {'Mary','Sabrina','Tracy','Sheena','Miranda','Eileen','Tracy','Katie'}
-race = {'AI', 'EU', 'Mixed', 'Martian', 'Unknown', 'White'}
-street = {'Ford St.','Sunshine Lane','Seasame St.','Main St.','Delphi Cres.', 'Miller Lane', 'Yonge St.', 'Main Rd.', 'First Ave'}
+male_names = {'Fred','Jim','Gary','John','Steve','Wilbur','Aurthur','Mike','Shawn','Richard','William','Bill','Tim'}
+female_names = {'Mary','Sabrina','Tracy','Sheena','Miranda','Eileen','Tracy','Katie','Penny','Shauna','Yolanda','Yvonne','Carrie'}
+race = {'AI','NH','B','U','W','A','O'}
+street = {'Ford St.','Sunshine Lane','Seasame St.','Main St.','Delphi Cres.', 'Miller Ln.', 'Younge St.', 'Main Rd.', 'First Ave', 'Oak St.'}
+city = {'Smithville','Culver City','Johnstown','Blundersburg','New City','Smallsville','Cedar Springs','Dogwood','Spring Valley','Pine Hill'}
+state= {'CA','OR','WA','ID','NV','MN','AZ','NM','WY','CO'}
 relation = {'Grandchild', 'Second Cousin', 'Sibling', 'Parent'}
 adt_event = {'A01', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08'}
 facility = {'Lab','ER','Clinic','Oncology','MedSurg','ICU'}
@@ -27,7 +31,7 @@ def createMSH(event,time,application):
    MSH.insert(2,"^~\&")
    MSH.insert(3,"adt-gen")
    MSH.insert(4,"%s"%(application))
-   MSH.insert(5,"HL7 ETL Project")
+   MSH.insert(5,"HL7 ETL")
    MSH.insert(6,'hl7-rdb')
    MSH.insert(7,time)
    MSH.insert(8,"")
@@ -58,9 +62,8 @@ def createEVN(event,time,reason, id, event_time, event_facility):
 
    return(print("EVN|" + EVN_string))
 
-#PID|1||999612||DEWING^AVERY^J|LISA|19901116|M||W|716 LAKE STREET^^OGDENSBURG^NY^13669||(315)250-4787^^^^^315^2504787|999-9999^^^^^^9999999|E|S|NONE|31458904|023-74-0199|||NH|||||||
 #creates PID segment
-def createPID(last,first,middle,dob):
+def createPID(sex,last,first,middle,dob,race,address,phone,marital):
    PID=[]
    PID_string=""
    PID.insert(1,"1")
@@ -70,12 +73,19 @@ def createPID(last,first,middle,dob):
    PID.insert(5,"%s^%s^%s"%(last,first,middle))
    PID.insert(6,"")
    PID.insert(7,dob)
-   #PID.insert(6,time)
-   #PID.insert(7,"")
-   #PID.insert(8,"ADT^%s"%(event))
-   #PID.insert(9,str(uuid.uuid4())[:8])
-   #PID.insert(10,str(uuid.uuid1())[:4])
-   #PID.insert(11,'2.5')
+   PID.insert(8,sex)
+   PID.insert(9,"")
+   PID.insert(10,race)
+   PID.insert(11,address)
+   PID.insert(12,"US")
+   PID.insert(13,phone)
+   PID.insert(14,"")
+   PID.insert(15,"")
+   PID.insert(16,marital)
+   PID.insert(17,"")
+   PID.insert(18,"")
+   PID.insert(19,"")
+   PID.insert(20,"")
    
    for x in range(1,len(PID)):
       PID_string += (PID[x] + "|")
@@ -235,20 +245,50 @@ message_event = random.choice(tuple(adt_event))
 message_time = str(datetime.now().strftime("%Y%m%d%H%M%S"))
 message_reason = random.choice(tuple(event_reason))
 message_clerk = random.choice(tuple(clerk_id))
+message_application=random.choice(tuple(application))
 event_facility = random.choice(tuple(facility))
 event_time = str(
    (datetime.now()-timedelta(minutes = random.randrange(1,999,1))).strftime("%Y%m%d%H%M%S")
 )
-message_application=random.choice(tuple(application))
 
-patient_last=random.choice(tuple(last_names))
-patient_first=random.choice(tuple(male_names))
-patient_middle=random.choice(string.ascii_uppercase)
-patient_sex=random.choice(tuple(sex))
-patient_dob=str((date.today()-timedelta(days = random.randrange(300,29950,1)
-   )).strftime("%Y%m%d"))
+#creates cohesive patient data so it is cohesive across params
+def createPatient():
+   patient_sex=random.choice(tuple(sex))
+   patient_last=random.choice(tuple(last_names))
+
+   if patient_sex == 'M':
+      patient_first=random.choice(tuple(male_names))
+   else:
+      patient_first=random.choice(tuple(female_names))
+   
+   patient_middle=random.choice(string.ascii_uppercase)
+   patient_dob=str((date.today()-timedelta(days = random.randrange(300,29950,1)
+      )).strftime("%Y%m%d")
+   )
+   patient_race=random.choice(tuple(race))
+
+   #patient_address components
+   patient_street=str(
+      random.randrange(1,9999,1)) + " " +random.choice(tuple(street)
+   )#not returned
+   patient_city=random.choice(tuple(city))#not returned
+   patient_state=random.choice(tuple(state))#not returned
+   patient_zip=str(random.randrange(10000,99999,1))#not returned
+   patient_address="%s^^%s^%s^%s"%(
+      patient_street,patient_city,patient_state,patient_zip
+   )
+   patient_phone="(" +str(random.randrange(100,999,1))+")555-"+str(random.randrange(1000,9999,1))
+   patient_marital=random.choice(tuple(marital))
 
 
-createMSH(message_event, message_time, message_application)
-createEVN(message_event, message_time, message_reason, event_time, message_clerk, event_facility)
-createPID(patient_last, patient_first, patient_middle, patient_dob)
+   return patient_sex,patient_last,patient_first,patient_middle,patient_dob, patient_race,patient_address,patient_phone,patient_marital
+
+#create patient details
+patient_sex,patient_last,patient_first,patient_middle,patient_dob,patient_race,patient_address,patient_phone,patient_marital = createPatient()
+
+#call functions to print the segments
+createMSH(message_event,message_time,message_application)
+createEVN(message_event,message_time,message_reason,event_time,message_clerk,event_facility
+)
+createPID(patient_sex,patient_last,patient_first,patient_middle,patient_dob,patient_race,patient_address,patient_phone,patient_marital
+)
