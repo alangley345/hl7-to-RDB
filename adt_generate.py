@@ -1,35 +1,66 @@
-from datetime import date
+from datetime import date, datetime, timedelta
 import uuid
+import random
 
-#create a MSH 
-def createMSH():
+#dictionaries to pull data from for messages
+   #might be moved later on to a db or separate files 
+sex = {'M', 'F'} 
+last_names = {'Muir','Smith','Adams','Garland', 'Meade', 'Fitzgerald', 'WHITE'}
+male_names = {'Fred','Jim','Gary','John','Steve','Wilbur','Aurthur','Mike'}
+female_names = {'Mary','Sabrina','Tracy','Sheena','Miranda','Eileen'}
+race = {'AI', 'EU', 'Mixed', 'Martian', 'Unknown', 'White'}
+street = {'Ford St.','Sunshine Lane','Seasame St.','Main St.','Delphi Cres.', 'Miller Lane', 'Yonge St.', 'Main Rd.', 'First Ave'}
+relation = {'Grandchild', 'Second Cousin', 'Sibling', 'Parent'}
+adt_event = {'A01', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08'}
+facility = {'Lab','ER','Clinic','Oncology','MedSurg','ICU'}
+application = {'Epic', 'Allscripts', 'Cerner','Expanse','Magic','CPSI','eCW'}
+event_reason = {'01','02','03','O','U'}
+clerk_id = {'0341','4321','4564','3478','0199','0002','4532','2341'}
+################################################################################
+
+#creates MSH segment
+def createMSH(event,time):
    MSH=[]
    MSH_string=""
 
-   MSH.insert(0,"MSH")
-   MSH.insert(1,"")
-   MSH.insert(2,"^~\&")
-   MSH.insert(3,"ADT-GEN")
-   MSH.insert(4,"Fake Hospital")
-   MSH.insert(5,"HL7 TRANSFORM")
-   MSH.insert(6,'hl7-rdb')
-   MSH.insert(7,date.today())
-   MSH.insert(8,"")
-   MSH.insert(9,'ADT^A01')
-   MSH.insert(10,str(uuid.uuid4())[:8])
-   MSH.insert[1] = 'P'
-   #MSH[12] = '2.3'
+   MSH.insert(0,"")
+   MSH.insert(1,"^~\&")
+   MSH.insert(2,"adt-gen")
+   MSH.insert(3,"%s"%(random.choice(tuple(application))))
+   MSH.insert(4,"My Transform Pipeline")
+   MSH.insert(5,'hl7-rdb')
+   MSH.insert(6,time)
+   MSH.insert(7,"")
+   MSH.insert(8,"ADT^%s"%(event))
+   MSH.insert(9,str(uuid.uuid4())[:8])
+   MSH.insert(10,str(uuid.uuid1())[:4])
+   MSH.insert(11,'2.5')
+   
+   for x in range(0,len(MSH)):
+      MSH_string += (MSH[x] + "|")
 
-   return(print(MSH))
+   return(print("MSH" + MSH_string))
 
-createMSH()
+#create EVN segment
+#EVN|A08|202206230204|202010151442|EDREGCLI|IATRICS^Iatric^Systems|REG CLI|.
+def createEVN(event,time,reason, id, event_time, event_facility):
+   EVN=[]
+   EVN_string=""
+
+   EVN.insert(0,event)
+   EVN.insert(1,time)
+   EVN.insert(2,time)
+   EVN.insert(3,"%s"%(reason))
+   EVN.insert(4,id)
+   EVN.insert(5,event_time)
+   EVN.insert(6,event_facility)
+   
+   for x in range(0,len(EVN)):
+      EVN_string += (EVN[x] + "|")
+
+   return(print("EVN|" + EVN_string))
 
 """
-function ran.scrubEVN(EVN)
-   EVN[2][1] = ran.TimeStamp()
-   EVN[6][1] = ran.TimeStamp()
-end
- 
 function ran.scrubPID(PID)
    PID[3][1][1] = math.random(9999999)
    ran.NameAndSex(PID)
@@ -67,17 +98,7 @@ function ran.Kin(NK1)
    NK1[3][1] = ran.choose(ran.Relation)
 end
  
-ran.Sex = {'M', 'F'}
- 
-ran.LastNames = {'Muir','Smith','Adams','Garland', 'Meade', 'Fitzgerald', 'WHITE'}
-ran.MaleNames = {'Fred','Jim','Gary','John'}
-ran.FemaleNames = {'Mary','Sabrina','Tracy'}
-ran.Race = {'AI', 'EU', 'Mixed', 'Martian', 'Unknown'}
-ran.Street = {'Delphi Cres.', 'Miller Lane', 'Yonge St.', 'Main Rd.'}
-ran.Relation = {'Grandchild', 'Second Cousin', 'Sibling', 'Parent'}
-ran.Event = {'A01', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08'}
-ran.Facility = {'Lab', 'E&R'}
-ran.Application = { 'AcmeMed', 'MedPoke', 'CowZing' }
+
  
 function ran.lastName() return ran.choose(ran.LastNames) end
  
@@ -187,3 +208,16 @@ function rand(In, Max, Size)
    return Result
 end
 """
+#segemnt function inputs
+message_event = random.choice(tuple(adt_event))
+message_time = str(datetime.now().strftime("%Y%m%d%H%M%S"))
+message_reason = random.choice(tuple(event_reason))
+message_clerk = random.choice(tuple(clerk_id))
+event_facility = random.choice(tuple(facility))
+event_time = str(
+   (datetime.now()-timedelta(minutes = random.randrange(1,999,1))).strftime("%Y%m%d%H%M%S")
+)
+
+
+createMSH(message_event, message_time)
+createEVN(message_event, message_time, message_reason, event_time, message_clerk, event_facility)
