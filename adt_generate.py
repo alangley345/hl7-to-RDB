@@ -1,3 +1,6 @@
+#refactor into classes with init
+#do I split the code into files? 
+
 #Any result mirroring a real person is strictly random chance
 from datetime import date, datetime, timedelta
 import uuid
@@ -27,6 +30,8 @@ pt_location = {'Lab','ER','Clinic','Onc','Med','OR','ICU','OB','Rad'}
 admit_type = {'A','C','E','L','R','U'}
 admit_source= {'1','2','3','4','5','6','7','8','9'}
 hosp_service = {'CAR','RAD','PUL','MED','SUR','URO','LD','LAB'}
+fin_class = {'MCD','MCR','COM','SELF','U'}
+title = {"MD","DO","NP","PA"}
 ################################################################################
 
 #creates MSH segment
@@ -118,7 +123,7 @@ def createNK1(last,first,middle,relation,address,phone):
    return(print("NK1|" + NK1_string))
 
 #creates PV1 segment
-def createPV1():
+def createPV1(provider_string1, provider_string2):
    PV1=[]
    PV1_string=""
    PV1.insert(1,"1")
@@ -127,7 +132,7 @@ def createPV1():
    PV1.insert(4,random.choice(tuple(admit_type)))
    PV1.insert(5,"")
    PV1.insert(6,"")
-   PV1.insert(7,"34521232^Smith^John")
+   PV1.insert(7,provider_string1)
    PV1.insert(8,"")
    PV1.insert(9,"")
    PV1.insert(10,random.choice(tuple(hosp_service)))
@@ -135,14 +140,18 @@ def createPV1():
    PV1.insert(12,"")
    PV1.insert(13,"")
    PV1.insert(14,random.choice(tuple(admit_source)))
+   PV1.insert(15,"")
+   PV1.insert(16,"")
+   PV1.insert(17,provider_string2)
+   PV1.insert(18,"")
+   PV1.insert(19,str(uuid.uuid4())[:8])
+   PV1.insert(20,random.choice(tuple(fin_class)))
+
    
    for x in range(1,len(PV1)):
       PV1_string += (PV1[x] + "|")
 
    return(print("PV1|" + PV1_string))
-"""
-PV1|1|E|ER^^^.|EM|||1396088571^SMITH^JOHN^^^^MD|||||||EME||Y|||35001346|MCR|||||||||||||||||||.|||||202206232008||||||||1649274275^SMITH^JOHN^^^^DO
-"""
 
 #segemnt function inputs
 message_event = random.choice(tuple(adt_event))
@@ -218,6 +227,25 @@ def createNextofKin(patient_last):
 #create nk details
 nk_address,nk_first,nk_last,nk_middle,nk_relation,nk_phone = createNextofKin(patient_last)
 
+#create provider for PV1
+def createProvider():
+   provider_sex=random.choice(tuple(sex))
+   provider_last=random.choice(tuple(last_names))
+   provider_title=random.choice(tuple(title))
+   if provider_sex == 'M':
+      provider_first=random.choice(tuple(male_names))
+   else:
+      provider_first=random.choice(tuple(female_names))
+   
+   provider_NPI=str(random.randint(1,2))+str(random.randint(000000000,999999999))
+
+   provider_string = provider_NPI+"^"+provider_last+"^"+provider_first+"^^^"+provider_title
+   
+   return provider_string
+
+provider_string1 = createProvider()
+provider_string2 = createProvider()   
+
 #call functions to print the segments
 createMSH(message_event,message_time,message_application)
 createEVN(message_event,message_time,message_reason,event_time,message_clerk,event_facility
@@ -225,4 +253,4 @@ createEVN(message_event,message_time,message_reason,event_time,message_clerk,eve
 createPID(patient_sex,patient_last,patient_first,patient_middle,patient_dob,patient_race,patient_address,patient_phone,patient_marital
 )
 createNK1(nk_last,nk_first,nk_middle,nk_relation,nk_address,nk_phone)
-createPV1()
+createPV1(provider_string1, provider_string2)
