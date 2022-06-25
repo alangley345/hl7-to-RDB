@@ -9,19 +9,24 @@ import string
 ################################################################################
 sex = {'M','F'}
 marital = {'M','S',}
-last_names = {'Muir','Smith','Adams','Garland','Meade','Fitzgerald','White','Weir','Johnson','Dalton','Reed','Black','Greene','Nedemyer'}
+last_names = {'Muir','Smith','Adams','Garland','Meade','Fitzgerald','White','Weir','Johnson','Dalton','Reed','Black','Greene','Nedemyer','Wilson'}
 male_names = {'Fred','Jim','Gary','John','Steve','Wilbur','Aurthur','Mike','Shawn','Richard','William','Bill','Tim'}
-female_names = {'Mary','Sabrina','Tracy','Sheena','Miranda','Eileen','Tracy','Katie','Penny','Shauna','Yolanda','Yvonne','Carrie'}
+female_names = {'Mary','Sabrina','Tracy','Sheena','Miranda','Eileen','Tracy','Katie','Penny','Shauna','Yolanda','Yvonne','Carrie','Mary','Rebecca'}
 race = {'AI','NH','B','U','W','A','O'}
-street = {'Ford St.','Sunshine Lane','Seasame St.','Main St.','Delphi Cres.', 'Miller Ln.', 'Younge St.', 'Main Rd.', 'First Ave', 'Oak St.'}
+street = {'Ford St.','Sunshine Lane','Seasame St.','Main St.','Delphi Cres.', 'Miller Ln.', 'Younge St.', 'Main Rd.', 'First Ave', 'Oak St.','Park Pl.'}
 city = {'Smithville','Culver City','Johnstown','Blundersburg','New City','Smallsville','Cedar Springs','Dogwood','Spring Valley','Pine Hill'}
 state= {'CA','OR','WA','ID','NV','MN','AZ','NM','WY','CO'}
 relation = {'Grandchild','Second Cousin','First Cousin','Sibling','Parent','Guardian','Uncle','Aunt','Spouse'}
-adt_event = {'A01', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08'}
-facility = {'Lab','ER','Clinic','Oncology','MedSurg','ICU'}
+adt_event = {'A01',} #'A03', 'A04', 'A05', 'A06', 'A07', 'A08'}
+facility = {'0134','0234','4523','0023','4532','6753','4512','0773'}
 application = {'Epic', 'Allscripts', 'Cerner','Expanse','Magic','CPSI','eCW'}
 event_reason = {'01','02','03','O','U'}
 clerk_id = {'0341','4321','4564','3478','0199','0002','4532','2341'}
+pt_class = {'I','E','O','R'}
+pt_location = {'Lab','ER','Clinic','Onc','Med','OR','ICU','OB','Rad'}
+admit_type = {'A','C','E','L','R','U'}
+admit_source= {'1','2','3','4','5','6','7','8','9'}
+hosp_service = {'CAR','RAD','PUL','MED','SUR','URO','LD','LAB'}
 ################################################################################
 
 #creates MSH segment
@@ -111,6 +116,30 @@ def createNK1(last,first,middle,relation,address,phone):
       NK1_string += (NK1[x] + "|")
 
    return(print("NK1|" + NK1_string))
+
+#creates PV1 segment
+def createPV1():
+   PV1=[]
+   PV1_string=""
+   PV1.insert(1,"1")
+   PV1.insert(2,random.choice(tuple(pt_class)))
+   PV1.insert(3,random.choice(tuple(pt_location)))
+   PV1.insert(4,random.choice(tuple(admit_type)))
+   PV1.insert(5,"")
+   PV1.insert(6,"")
+   PV1.insert(7,"34521232^Smith^John")
+   PV1.insert(8,"")
+   PV1.insert(9,"")
+   PV1.insert(10,random.choice(tuple(hosp_service)))
+   PV1.insert(11,"")
+   PV1.insert(12,"")
+   PV1.insert(13,"")
+   PV1.insert(14,random.choice(tuple(admit_source)))
+   
+   for x in range(1,len(PV1)):
+      PV1_string += (PV1[x] + "|")
+
+   return(print("PV1|" + PV1_string))
 """
 PV1|1|E|ER^^^.|EM|||1396088571^SMITH^JOHN^^^^MD|||||||EME||Y|||35001346|MCR|||||||||||||||||||.|||||202206232008||||||||1649274275^SMITH^JOHN^^^^DO
 """
@@ -196,3 +225,4 @@ createEVN(message_event,message_time,message_reason,event_time,message_clerk,eve
 createPID(patient_sex,patient_last,patient_first,patient_middle,patient_dob,patient_race,patient_address,patient_phone,patient_marital
 )
 createNK1(nk_last,nk_first,nk_middle,nk_relation,nk_address,nk_phone)
+createPV1()
