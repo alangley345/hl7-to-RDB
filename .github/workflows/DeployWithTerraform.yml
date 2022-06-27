@@ -1,0 +1,63 @@
+name: Deploy with Terraform
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Zip_And_Commit:
+    name: Create zips and add them to repo
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+    
+    - name: Make Lambda Zips
+      working-directory: scripts
+      shell: bash
+      run: |
+        bash makeZip.sh
+
+    - name: GIT commit and push all changed files
+      env: 
+        CI_COMMIT_MESSAGE: Created with DeploywithTerraform.yml
+        CI_COMMIT_AUTHOR: Github Actions
+      run: |
+        git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+        git config --global user.email "alangley345@users.noreply.github.com"
+        git commit -a -m "${{ env.CI_COMMIT_MESSAGE }}"
+        git push
+
+  Terraform:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+    
+    - name: Terraform Setup
+      uses: hashicorp/setup-terraform@v1
+
+    - name: Terraform Init
+      run: |
+        cd terraform/
+        export GITHUB_TOKEN=$GITHUB_TOKEN
+        terraform init
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        AWS_ACCESS_KEY_ID:  ${{ secrets.ACCESS_TOKEN }}
+        AWS_SECRET_ACCESS_KEY:  ${{ secrets.SECRET_KEY }}
+
+    - name: Terraform Validate
+      run: terraform validate 
+
+    - name: Terraform Apply
+      run: |
+        cd terraform/
+        export GITHUB_TOKEN=$GITHUB_TOKEN
+        terraform apply -auto-approve
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        AWS_ACCESS_KEY_ID:  ${{ secrets.ACCESS_TOKEN }}
+        AWS_SECRET_ACCESS_KEY:  ${{ secrets.SECRET_KEY }}
