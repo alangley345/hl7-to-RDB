@@ -12,8 +12,8 @@ import string
 ################################################################################
 sex = {'M','F'}
 marital = {'M','S',}
-last_names = {'Muir','Smith','Adams','Garland','Meade','Fitzgerald','White','Weir','Johnson','Dalton','Reed','Black','Greene','Nedemyer','Wilson'}
-male_names = {'Fred','Jim','Gary','John','Steve','Wilbur','Aurthur','Mike','Shawn','Richard','William','Bill','Tim'}
+last_names = {'Muir','Smith','Adams','Garland','Meade','Fitzgerald','White','Weir','Johnson','Dalton','Reed','Black','Greene','Nedemyer','Wilson','Neilson','Gormon'}
+male_names = {'Fred','Jim','Gary','John','Steve','Wilbur','Aurthur','Mike','Shawn','Richard','William','Bill','Tim','Mark','Charles','Robert'}
 female_names = {'Mary','Sabrina','Tracy','Sheena','Miranda','Eileen','Tracy','Katie','Penny','Shauna','Yolanda','Yvonne','Carrie','Mary','Rebecca'}
 race = {'AI','NH','B','U','W','A','O'}
 street = {'Ford St.','Sunshine Lane','Seasame St.','Main St.','Delphi Cres.', 'Miller Ln.', 'Younge St.', 'Main Rd.', 'First Ave', 'Oak St.','Park Pl.'}
@@ -224,9 +224,6 @@ def createNextofKin(patient_last):
 
    return nk_address,nk_first,nk_last,nk_middle,nk_relation,nk_phone
 
-#create nk details
-nk_address,nk_first,nk_last,nk_middle,nk_relation,nk_phone = createNextofKin(patient_last)
-
 #create provider for PV1
 def createProvider():
    provider_sex=random.choice(tuple(sex))
@@ -243,14 +240,21 @@ def createProvider():
    
    return provider_string
 
+#create nk details
+nk_address,nk_first,nk_last,nk_middle,nk_relation,nk_phone = createNextofKin(patient_last)
+
+
 provider_string1 = createProvider()
 provider_string2 = createProvider()   
 
-#call functions to print the segments
-createMSH(message_event,message_time,message_application)
-createEVN(message_event,message_time,message_reason,event_time,message_clerk,event_facility
-)
-createPID(patient_sex,patient_last,patient_first,patient_middle,patient_dob,patient_race,patient_address,patient_phone,patient_marital
-)
-createNK1(nk_last,nk_first,nk_middle,nk_relation,nk_address,nk_phone)
-createPV1(provider_string1, provider_string2)
+#functions to print the segments
+def newADT():
+   createMSH(message_event,message_time,message_application)
+   createEVN(message_event,message_time,message_reason,event_time,message_clerk,event_facility
+   )
+   createPID(patient_sex,patient_last,patient_first,patient_middle,patient_dob,patient_race,patient_address,patient_phone,patient_marital
+   )
+   createNK1(nk_last,nk_first,nk_middle,nk_relation,nk_address,nk_phone)
+   createPV1(provider_string1, provider_string2)
+#print segments
+newADT()
