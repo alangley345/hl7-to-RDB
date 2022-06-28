@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "mirth" {
-  name = "hl7_to_rdb mirth"
+  name = "hl7_to_rdb_mirth"
 
   setting {
     name  = "containerInsights"
