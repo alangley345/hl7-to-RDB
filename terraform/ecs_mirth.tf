@@ -1,4 +1,4 @@
-resource "aws_ecs_cluster" "foo" {
+resource "aws_ecs_cluster" "mirth" {
   name = "hl7-to-rbd mirth"
 
   setting {
