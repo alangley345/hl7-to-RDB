@@ -26,6 +26,7 @@ resource "aws_ecs_service" "mirth" {
 
 resource "aws_ecs_task_definition" "mirth" {
   family = "hl7_to_rdb_mirth"
+  requires_compatibilities = ["ec2"]
   container_definitions = jsonencode([
     {
       name      = "mirth"
