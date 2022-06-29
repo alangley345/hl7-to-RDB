@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "mirth" {
     {
       name      = "mirth"
       image     = "nextgenhealthcare/connect"
-      cpu       = 1
+      cpu       = 10
       memory    = 256
       essential = true
       portMappings = [
@@ -53,8 +53,8 @@ resource "aws_ecs_task_definition" "mirth" {
   }
 }
 
-#resource "aws_ecs_task_set" "mirth" {
-# service         = aws_ecs_service.mirth.id
-# cluster         = aws_ecs_cluster.mirth.id
-# task_definition = aws_ecs_task_definition.mirth.arn
-#}
+resource "aws_ecs_task_set" "mirth" {
+  service         = aws_ecs_service.mirth.id
+  cluster         = aws_ecs_cluster.mirth.id
+  task_definition = aws_ecs_task_definition.mirth.arn
+}
