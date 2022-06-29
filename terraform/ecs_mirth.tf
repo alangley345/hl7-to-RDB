@@ -12,8 +12,8 @@ resource "aws_ecs_service" "mirth" {
   cluster         = aws_ecs_cluster.mirth.id
   task_definition = aws_ecs_task_definition.mirth.arn
   desired_count   = 1
-  iam_role        = aws_iam_role.foo.arn
-  depends_on      = [aws_iam_role_policy.foo]
+  iam_role        = aws_iam_role.mirth-instance.arn
+  #depends_on      = [aws_iam_role_policy.foo]
 
   ordered_placement_strategy {
     type  = "binpack"
