@@ -29,7 +29,7 @@ resource "aws_ecs_task_definition" "mirth" {
   container_definitions = jsonencode([
     {
       name      = "mirth"
-      image     = "service-first"
+      image     = "nextgenhealthcare/connect"
       cpu       = 1
       memory    = 256
       essential = true
@@ -51,4 +51,10 @@ resource "aws_ecs_task_definition" "mirth" {
     type       = "memberOf"
     expression = "attribute:ecs.availability-zone in [us-east-1a, us-east-1b]"
   }
+}
+
+resource "aws_ecs_task_set" "mirth" {
+  service         = aws_ecs_service.mirth.id
+  cluster         = aws_ecs_cluster.mirth.id
+  task_definition = aws_ecs_task_definition.mirth.arn
 }
