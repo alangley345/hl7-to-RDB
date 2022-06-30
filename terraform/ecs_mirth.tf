@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "mirth" {
   container_definitions = jsonencode([
     {
       name      = "mirth"
-      image     = "nextgenhealthcare/connect"
+      image     = "https://hub.docker.com/r/nextgenhealthcare/connect:latest"
       cpu       = 10
       memory    = 256
       essential = true
