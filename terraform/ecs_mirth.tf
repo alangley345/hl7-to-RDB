@@ -45,7 +45,7 @@ resource "aws_ecs_task_definition" "mirth" {
                         "awslogs-group" : "fargate-logs",
                         "awslogs-stream-prefix" : "mirth"
                     }
-                },
+                }
     ]
   DEFINITION
 }
