@@ -27,21 +27,11 @@ resource "aws_ecs_service" "mirth" {
 resource "aws_ecs_task_definition" "mirth" {
   family = "hl7_to_rdb_mirth"
   requires_compatibilities = ["FARGATE"]
-  container_definitions = jsonencode([
-    {
-      name      = "mirth"
-      image     = "https://hub.docker.com/r/nextgenhealthcare/connect:latest"
-      cpu       = 10
-      memory    = 256
-      essential = true
-      portMappings = [
-        {
-          containerPort = 8443
-          hostPort      = 8443
-        }
-      ]
-    },
-  ])
+  #task_role_arn            = "${var.ecs_task_role}"
+  #execution_role_arn       = "${var.ecs_task_execution_role}"
+  network_mode             = "awsvpc"
+  cpu                      = "100"
+  memory                   = "256"
 
   #volume {
   # name      = "service-storage"
