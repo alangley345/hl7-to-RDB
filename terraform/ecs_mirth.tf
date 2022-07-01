@@ -33,10 +33,22 @@ resource "aws_ecs_task_definition" "mirth" {
   cpu                      = "100"
   memory                   = "256"
 
-  #volume {
-  # name      = "service-storage"
-  # host_path = "/ecs/service-storage"
-  #}
+  container_definitions = <<DEFINITION
+    [
+      {
+        "image": "https://dockerhub.io/r/nextgenhealth/connect:latest",
+        "name": "mirth-connect",
+        "logConfiguration": {
+                    "logDriver": "awslogs",
+                    "options": {
+                        "awslogs-region" : "us-east-1",
+                        "awslogs-group" : "fargate-logs",
+                        "awslogs-stream-prefix" : "mirth"
+                    }
+                },
+    ]
+  DEFINITION
+}
 
 }
 
