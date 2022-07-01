@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "mirth" {
   #task_role_arn            = "${var.ecs_task_role}"
   #execution_role_arn       = "${var.ecs_task_execution_role}"
   network_mode             = "awsvpc"
-  cpu                      = "100"
+  cpu                      = "256"
   memory                   = "256"
 
   container_definitions = <<DEFINITION
@@ -38,7 +38,7 @@ resource "aws_ecs_task_definition" "mirth" {
       {
         "image": "https://dockerhub.io/r/nextgenhealth/connect:latest",
         "name": "mirth-connect",
-        "cpu": 100,
+        "cpu": 256,
         "logConfiguration": {
                     "logDriver": "awslogs",
                     "options": {
