@@ -14,9 +14,9 @@ resource "aws_ecs_service" "mirth" {
   desired_count   = 1
 
   network_configuration {
-    subnets            = aws_subnet.mirth
-    security_groups    = data.terraform_remote_state.base_state.outputs.production_default_sg
-    assign_public_ip   = false
+    subnets          = [aws_subnet.mirth]
+    security_groups  = [data.terraform_remote_state.base_state.outputs.production_default_sg]
+    assign_public_ip = false
   }
 
   ordered_placement_strategy {
@@ -27,13 +27,13 @@ resource "aws_ecs_service" "mirth" {
 }
 
 resource "aws_ecs_task_definition" "mirth" {
-  family = "hl7_to_rdb_mirth"
+  family                   = "hl7_to_rdb_mirth"
   requires_compatibilities = ["FARGATE"]
   #task_role_arn            = "${var.ecs_task_role}"
   #execution_role_arn       = "${var.ecs_task_execution_role}"
-  network_mode             = "awsvpc"
-  cpu                      = "256"
-  memory                   = "512"
+  network_mode = "awsvpc"
+  cpu          = "256"
+  memory       = "512"
 
   container_definitions = <<DEFINITION
     [
