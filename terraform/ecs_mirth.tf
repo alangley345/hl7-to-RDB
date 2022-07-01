@@ -13,15 +13,17 @@ resource "aws_ecs_service" "mirth" {
   task_definition = aws_ecs_task_definition.mirth.arn
   desired_count   = 1
 
+  network_configuration {
+    subnets            = aws_subnet.mirth
+    security_groups    = data.terraform_remote_state.base_state.outputs.production_default_sg
+    assign_public_ip   = false
+  }
+
   ordered_placement_strategy {
     type  = "binpack"
     field = "cpu"
   }
 
-  placement_constraints {
-    type       = "memberOf"
-    expression = "attribute:ecs.availability-zone in [us-west-2a, us-west-2b]"
-  }
 }
 
 resource "aws_ecs_task_definition" "mirth" {
