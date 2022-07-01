@@ -38,7 +38,7 @@ resource "aws_ecs_task_definition" "mirth" {
       {
         "image": "https://dockerhub.io/r/nextgenhealth/connect:latest",
         "name": "mirth-connect",
-        "cpu": 256,
+        "cpu": 256
       }
     ]
   DEFINITION
