@@ -46,6 +46,7 @@ resource "aws_ecs_task_definition" "mirth" {
                         "awslogs-stream-prefix" : "mirth"
                     }
                 }
+      }
     ]
   DEFINITION
 }
