@@ -31,7 +31,7 @@ resource "aws_ecs_task_definition" "mirth" {
   #execution_role_arn       = "${var.ecs_task_execution_role}"
   network_mode             = "awsvpc"
   cpu                      = "256"
-  memory                   = "256"
+  memory                   = "512"
 
   container_definitions = <<DEFINITION
     [
