@@ -14,7 +14,7 @@ resource "aws_ecs_service" "mirth" {
   desired_count   = 1
 
   network_configuration {
-    subnets          = [aws_subnet.mirth]
+    subnets          = [aws_subnet.mirth.id]
     security_groups  = [data.terraform_remote_state.base_state.outputs.production_default_sg_id]
     assign_public_ip = false
   }
