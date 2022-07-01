@@ -54,8 +54,8 @@ resource "aws_ecs_task_definition" "mirth" {
   }
 }
 
-resource "aws_ecs_task_set" "mirth" {
-  service         = aws_ecs_service.mirth.arn
-  cluster         = aws_ecs_cluster.mirth.arn
-  task_definition = aws_ecs_task_definition.mirth.arn
-}
+#resource "aws_ecs_task_set" "mirth" {
+# service         = aws_ecs_service.mirth.arn
+# cluster         = aws_ecs_cluster.mirth.arn
+# task_definition = aws_ecs_task_definition.mirth.arn
+#}
