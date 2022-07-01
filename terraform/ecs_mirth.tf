@@ -46,8 +46,15 @@ resource "aws_ecs_task_definition" "mirth" {
   DEFINITION
 }
 
-resource "aws_ecs_task_set" "mirth" {
+resource "aws_ecs_task" "mirth" {
   service         = aws_ecs_service.mirth.id
   cluster         = aws_ecs_cluster.mirth.id
   task_definition = aws_ecs_task_definition.mirth.arn
+
+  network_configuration {
+    subnets          = [aws_subnet.mirth.id]
+    security_groups  = [data.terraform_remote_state.base_state.outputs.production_default_sg_id]
+    assign_public_ip = false
+  }
+  
 }
