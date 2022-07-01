@@ -39,14 +39,6 @@ resource "aws_ecs_task_definition" "mirth" {
         "image": "https://dockerhub.io/r/nextgenhealth/connect:latest",
         "name": "mirth-connect",
         "cpu": 256,
-        "logConfiguration": {
-                    "logDriver": "awslogs",
-                    "options": {
-                        "awslogs-region" : "us-east-1",
-                        "awslogs-group" : "fargate-logs",
-                        "awslogs-stream-prefix" : "mirth"
-                    }
-                }
       }
     ]
   DEFINITION
