@@ -15,7 +15,7 @@ resource "aws_ecs_service" "mirth" {
 
   network_configuration {
     subnets          = [aws_subnet.mirth]
-    security_groups  = [data.terraform_remote_state.base_state.outputs.production_default_sg]
+    security_groups  = [data.terraform_remote_state.base_state.outputs.production_default_sg_id]
     assign_public_ip = false
   }
 
