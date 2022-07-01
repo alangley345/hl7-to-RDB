@@ -54,9 +54,17 @@ resource "aws_ecs_task_definition" "mirth" {
   }
 }
 
+<<<<<<< HEAD
 resource "aws_ecs_task_set" "mirth" {
   service         = aws_ecs_service.mirth.id
   cluster         = aws_ecs_cluster.mirth.id
   task_definition = aws_ecs_task_definition.mirth.arn
   launch_type     = FARGATE
 }
+=======
+#resource "aws_ecs_task_set" "mirth" {
+# service         = aws_ecs_service.mirth.arn
+# cluster         = aws_ecs_cluster.mirth.arn
+# task_definition = aws_ecs_task_definition.mirth.arn
+#}
+>>>>>>> 91afd612d665d74916fe7953c1bdf61b33876a3f
